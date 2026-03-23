@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unmuted — Teen Mental Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e14;
+    --surface: #16161f;
+    --surface2: #1e1e2a;
+    --border: #2a2a3a;
+    --text: #f0eef8;
+    --muted: #8884a0;
+    --accent-teal: #5de0c8;
+    --accent-lavender: #a78bfa;
+    --accent-peach: #fda68a;
+    --accent-yellow: #f9e04b;
+    --anxiety: #5de0c8;
+    --depression: #a78bfa;
+    --burnout: #fda68a;
+    --help: #f9e04b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(93,224,200,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(167,139,250,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .screen { display: none; position: relative; z-index: 1; }
+  .screen.active { display: block; }
+
+  /* ---- LANDING ---- */
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+
+  .hero-tagline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 7vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.3s;
+  }
+
+  .hero-tagline span {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 420px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .btn-primary {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 16px 40px;
+    border-radius: 100px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-lavender));
+    color: #0e0e14;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.7s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(93,224,200,0.25);
+  }
+
+  .pill-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.9s;
+  }
+
+  .pill {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  /* ---- TOPIC SELECT ---- */
+  #topics {
+    min-height: 100vh;
+    padding: 60px 24px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 480px) {
+    .topic-grid { grid-template-columns: 1fr; }
+  }
+
+  .topic-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 18px;
+  }
+
+  .topic-card.anxiety::before { background: radial-gradient(ellipse at top left, rgba(93,224,200,0.12), transparent 70%); }
+  .topic-card.depression::before { background: radial-gradient(ellipse at top left, rgba(167,139,250,0.12), transparent 70%); }
+  .topic-card.burnout::before { background: radial-gradient(ellipse at top left, rgba(253,166,138,0.12), transparent 70%); }
+  .topic-card.help::before { background: radial-gradient(ellipse at top left, rgba(249,224,75,0.12), transparent 70%); }
+
+  .topic-card:hover::before, .topic-card.selected::before { opacity: 1; }
+
+  .topic-card:hover { transform: translateY(-3px); }
+
+  .topic-card.anxiety.selected { border-color: var(--anxiety); }
+  .topic-card.depression.selected { border-color: var(--depression); }
+  .topic-card.burnout.selected { border-color: var(--burnout); }
+  .topic-card.help.selected { border-color: var(--help); }
+
+  .topic-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .topic-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .topic-card.anxiety .topic-name { color: var(--anxiety); }
+  .topic-card.depression .topic-name { color: var(--depression); }
+  .topic-card.burnout .topic-name { color: var(--burnout); }
+  .topic-card.help .topic-name { color: var(--help); }
+
+  .topic-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- SCENARIO ---- */
+  #scenario {
+    min-height: 100vh;
+    padding: 60px 24px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 10px;
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  .scenario-chip {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  .scenario-q {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 32px;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .choice-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    line-height: 1.5;
+  }
+
+  .choice-btn:hover {
+    border-color: var(--accent-lavender);
+    background: var(--surface2);
+    transform: translateX(4px);
+  }
+
+  /* ---- INSIGHT ---- */
+  #insight {
+    min-height: 100vh;
+    padding: 60px 24px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .insight-card {
+    background: var(--surface);
+    border-radius: 24px;
+    padding: 36px 32px;
+    margin-bottom: 20px;
+    border: 1.5px solid var(--border);
+    animation: fadeUp 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .insight-card:nth-child(2) { animation-delay: 0.15s; }
+  .insight-card:nth-child(3) { animation-delay: 0.3s; }
+
+  .insight-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .insight-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .insight-body {
+    font-size: 15px;
+    color: #c4c0d8;
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+
+  .signal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .signal-list li {
+    font-size: 14px;
+    color: var(--muted);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .signal-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent-teal);
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .action-grid { grid-template-columns: 1fr; }
+  }
+
+  .action-tile {
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .action-tile .tile-icon { font-size: 24px; margin-bottom: 8px; }
+
+  .action-tile .tile-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .action-tile .tile-sub {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .crisis-banner {
+    background: rgba(249,224,75,0.08);
+    border: 1.5px solid rgba(249,224,75,0.25);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+
+  .crisis-banner .icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+
+  .crisis-text { font-size: 14px; color: #e0daf0; line-height: 1.6; }
+  .crisis-text strong { color: var(--help); }
+
+  .nav-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 12px 24px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent-lavender); color: var(--text); }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    margin-bottom: 32px;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+    padding: 0;
+  }
+
+  .back-btn:hover { color: var(--text); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <div class="logo">Unmuted</div>
+  <h1 class="hero-tagline">It's okay to<br><span>not be okay.</span></h1>
+  <p class="hero-sub">A space to understand what you're feeling — without the clinical jargon, and without judgment.</p>
+  <button class="btn-primary" onclick="showScreen('topics')">Explore What's Going On →</button>
+  <div class="pill-row">
+    <span class="pill">Made by a teen, for teens</span>
+    <span class="pill">No sign-up needed</span>
+    <span class="pill">Takes 3 minutes</span>
+  </div>
+</div>
+
+<!-- TOPIC SELECT -->
+<div id="topics" class="screen">
+  <div style="max-width:700px;margin:0 auto;padding:60px 24px;">
+    <button class="back-btn" onclick="showScreen('landing')">← Back</button>
+    <div class="section-label">Step 1 of 2</div>
+    <h2 class="section-title">What's been on your mind?</h2>
+    <p class="section-sub">Pick whatever feels closest. There's no wrong answer.</p>
+    <div class="topic-grid">
+      <div class="topic-card anxiety" onclick="selectTopic('anxiety')">
+        <span class="topic-icon">🌊</span>
+        <div class="topic-name">Anxiety & Stress</div>
+        <div class="topic-desc">Racing thoughts, worry you can't turn off, feeling on edge</div>
+      </div>
+      <div class="topic-card depression" onclick="selectTopic('depression')">
+        <span class="topic-icon">🌑</span>
+        <div class="topic-name">Low Mood</div>
+        <div class="topic-desc">Feeling flat, empty, or sad for longer than usual</div>
+      </div>
+      <div class="topic-card burnout" onclick="selectTopic('burnout')">
+        <span class="topic-icon">🪫</span>
+        <div class="topic-name">Burnout</div>
+        <div class="topic-desc">Exhausted, unmotivated, running on empty no matter how much you sleep</div>
+      </div>
+      <div class="topic-card help" onclick="selectTopic('help')">
+        <span class="topic-icon">🧭</span>
+        <div class="topic-name">Getting Help</div>
+        <div class="topic-desc">Not sure who to talk to or how to start that conversation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENARIO -->
+<div id="scenario" class="screen">
+  <div style="max-width:640px;margin:0 auto;padding:60px 24px;">
+    <button class="back-btn" onclick="showScreen('topics')">← Back</button>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div id="scenarioChip" class="scenario-chip"></div>
+    <div id="scenarioQ" class="scenario-q"></div>
+    <div id="scenarioChoices" class="choices"></div>
+  </div>
+</div>
+
+<!-- INSIGHT -->
+<div id="insight" class="screen">
+  <div style="max-width:640px;margin:0 auto;padding:60px 24px;">
+    <button class="back-btn" onclick="showScreen('topics')">← Try another topic</button>
+    <div id="insightContent"></div>
+    <div class="nav-row">
+      <button class="btn-outline" onclick="showScreen('topics')">Explore another topic</button>
+      <button class="btn-primary" onclick="showScreen('landing')" style="opacity:1;animation:none;">Start over</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const topics = {
+  anxiety: {
+    color: '#5de0c8',
+    chipBg: 'rgba(93,224,200,0.12)',
+    label: 'Anxiety & Stress',
+    scenarios: [
+      {
+        q: "You have a big test tomorrow. You've studied, but your brain won't stop spinning through worst-case scenarios. You:",
+        choices: [
+          "Can't sleep — I keep imagining failing even though I know the material",
+          "Feel physically sick — stomach tight, heart racing",
+          "Keep studying even though I know it won't help at this point",
+          "This happens with everything, not just tests"
+        ]
+      },
+      {
+        q: "At lunch, you suddenly feel really self-conscious — like everyone is looking at you and judging. You:",
+        choices: [
+          "Leave and eat alone somewhere else",
+          "Stay but feel frozen, can't join the conversation",
+          "Replay the whole thing later and cringe",
+          "This feeling follows me everywhere"
+        ]
+      }
+    ],
+    insight: {
+      whatItIs: "Anxiety is your brain's threat-detection system working overtime.",
+      explanation: "When you feel anxious, your body releases stress hormones that cause physical symptoms — racing heart, tight stomach, difficulty breathing. This is the 'fight or flight' response. It evolved to protect you from real danger, but sometimes it misfires in everyday situations like tests or social settings.",
+      signals: [
+        "Racing or looping thoughts you can't stop",
+        "Physical tension — jaw, shoulders, stomach",
+        "Avoiding things to escape the worried feeling",
+        "Reassurance-seeking that only helps briefly",
+        "Trouble sleeping because your mind won't quiet"
+      ],
+      actions: [
+        { icon: "🫁", label: "Right now", sub: "Box breathing: in 4s, hold 4s, out 4s, hold 4s. Repeat 4x." },
+        { icon: "📓", label: "This week", sub: "Write down the worry, then write one realistic counter-thought." },
+        { icon: "🧑‍⚕️", label: "Longer term", sub: "A therapist can teach CBT skills that actually rewire anxious thinking." }
+      ]
+    }
+  },
+  depression: {
+    color: '#a78bfa',
+    chipBg: 'rgba(167,139,250,0.12)',
+    label: 'Low Mood',
+    scenarios: [
+      {
+        q: "Things you used to love — music, your friends, your hobbies — just feel... meh. How long has this been going on?",
+        choices: [
+          "A few days, usually passes",
+          "Most of this month honestly",
+          "Hard to remember the last time I felt excited about something",
+          "I still enjoy things sometimes, but something feels off"
+        ]
+      },
+      {
+        q: "Someone asks 'how are you?' You think:",
+        choices: [
+          "'Fine' — easier than explaining the weight I'm carrying",
+          "I genuinely don't know how I am",
+          "Hollow. Like I'm watching my own life from a distance",
+          "I don't want to burden anyone"
+        ]
+      }
+    ],
+    insight: {
+      whatItIs: "Low mood that lingers is worth taking seriously — it's not weakness.",
+      explanation: "When sadness or emptiness sticks around for weeks and starts getting in the way of daily life, it might be depression. Depression isn't just 'feeling sad' — it often shows up as numbness, difficulty concentrating, losing interest in things you used to like, or feeling disconnected from yourself and others.",
+      signals: [
+        "Losing interest in activities that used to feel meaningful",
+        "Low energy even after sleeping",
+        "Feeling empty, numb, or detached — not necessarily 'sad'",
+        "Difficulty concentrating or making decisions",
+        "Negative self-talk that feels very convincing"
+      ],
+      actions: [
+        { icon: "🚶", label: "Right now", sub: "A 10-min walk outside can genuinely shift brain chemistry. Low bar, real effect." },
+        { icon: "💬", label: "This week", sub: "Tell one trusted person — a friend, parent, or counselor — how you've been feeling." },
+        { icon: "🧑‍⚕️", label: "Longer term", sub: "Therapy (especially CBT or talk therapy) is highly effective. You don't have to feel this way." }
+      ]
+    }
+  },
+  burnout: {
+    color: '#fda68a',
+    chipBg: 'rgba(253,166,138,0.12)',
+    label: 'Burnout',
+    scenarios: [
+      {
+        q: "It's Sunday night. You have homework, a club meeting tomorrow, and a college prep thing this week. You feel:",
+        choices: [
+          "Completely flat — no energy to care about any of it",
+          "Resentful of things I used to be excited about",
+          "Like I'm just going through the motions",
+          "Guilty that I'm not doing more, but unable to start"
+        ]
+      },
+      {
+        q: "When was the last time you did something just because you wanted to — no grades, no resume, no obligation?",
+        choices: [
+          "I honestly can't remember",
+          "I try to but feel guilty the whole time",
+          "Even my hobbies feel like tasks now",
+          "Rest feels productive only if I 'earned' it"
+        ]
+      }
+    ],
+    insight: {
+      whatItIs: "Burnout is what happens when your output has exceeded your input for too long.",
+      explanation: "Burnout isn't laziness. It's exhaustion that goes deeper than sleep can fix — physical, emotional, and motivational. High-achieving teens are especially vulnerable because the pressure to do more is constant. Your brain and body are telling you something real: the pace is unsustainable.",
+      signals: [
+        "Chronic exhaustion that sleep doesn't fix",
+        "Feeling detached or cynical about school, activities, or people",
+        "Decreased performance despite maximum effort",
+        "Irritability or emotional numbness",
+        "Lost sense of why any of it matters"
+      ],
+      actions: [
+        { icon: "🛑", label: "Right now", sub: "Identify one thing you can drop or reduce this week. Seriously — one thing." },
+        { icon: "🌿", label: "This week", sub: "Schedule one hour of unstructured time with zero productivity expectations." },
+        { icon: "🗣️", label: "Longer term", sub: "Talk to a counselor about workload and boundaries — they can help you prioritize without guilt." }
+      ]
+    }
+  },
+  help: {
+    color: '#f9e04b',
+    chipBg: 'rgba(249,224,75,0.1)',
+    label: 'Getting Help',
+    scenarios: [
+      {
+        q: "You know you probably need to talk to someone. What's stopping you?",
+        choices: [
+          "I don't want to worry my parents",
+          "Feels like my problems aren't 'bad enough' to warrant help",
+          "I don't know who to go to or what to say",
+          "Worried people will see me differently"
+        ]
+      },
+      {
+        q: "Which feels most true about therapy or counseling?",
+        choices: [
+          "It's for people who are seriously struggling — not me",
+          "I'd want to try it but don't know how to start",
+          "I've thought about it but feel embarrassed",
+          "I don't think talking would actually help"
+        ]
+      }
+    ],
+    insight: {
+      whatItIs: "Asking for help is one of the hardest and most courageous things you can do.",
+      explanation: "Most people who seek mental health support do so before things become a crisis — because they notice something is off and they want to feel better. You don't need to be 'bad enough' to deserve support. The bar is simply: you're struggling, and you'd like help. That's it.",
+      signals: [
+        "You've been thinking about this for a while",
+        "Things you've tried on your own haven't fully worked",
+        "It's affecting school, relationships, or daily life",
+        "You're feeling this way more often than not",
+        "You're reading this right now — that's a sign"
+      ],
+      actions: [
+        { icon: "📝", label: "This week", sub: "Text or email your school counselor. You can literally say: 'I've been struggling and want to talk.'" },
+        { icon: "📱", label: "Crisis line", sub: "Crisis Text Line: text HOME to 741741. Free, confidential, 24/7." },
+        { icon: "👩‍👧", label: "Trusted adult", sub: "Pick one person — parent, teacher, coach — and share one sentence about how you've been feeling." }
+      ]
+    }
+  }
+};
+
+let currentTopic = null;
+let currentScenario = 0;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function selectTopic(topic) {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.topic-card.${topic}`).classList.add('selected');
+  currentTopic = topic;
+  currentScenario = 0;
+  setTimeout(() => loadScenario(), 150);
+}
+
+function loadScenario() {
+  const t = topics[currentTopic];
+  const s = t.scenarios[currentScenario];
+  const total = t.scenarios.length;
+  const pct = (currentScenario / total) * 100;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressFill').style.background = `linear-gradient(90deg, ${t.color}, ${t.color}aa)`;
+
+  const chip = document.getElementById('scenarioChip');
+  chip.textContent = t.label;
+  chip.style.background = t.chipBg;
+  chip.style.color = t.color;
+  chip.style.border = `1px solid ${t.color}44`;
+
+  document.getElementById('scenarioQ').textContent = s.q;
+
+  const choicesEl = document.getElementById('scenarioChoices');
+  choicesEl.innerHTML = '';
+  s.choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c;
+    btn.onclick = () => advanceScenario();
+    choicesEl.appendChild(btn);
+  });
+
+  showScreen('scenario');
+}
+
+function advanceScenario() {
+  currentScenario++;
+  if (currentScenario < topics[currentTopic].scenarios.length) {
+    document.getElementById('progressFill').style.width = (currentScenario / topics[currentTopic].scenarios.length * 100) + '%';
+    loadScenario();
+  } else {
+    showInsight();
+  }
+}
+
+function showInsight() {
+  const t = topics[currentTopic];
+  const ins = t.insight;
+
+  const actionsHTML = ins.actions.map(a => `
+    <div class="action-tile">
+      <div class="tile-icon">${a.icon}</div>
+      <div class="tile-label">${a.label}</div>
+      <div class="tile-sub">${a.sub}</div>
+    </div>
+  `).join('');
+
+  const signalsHTML = ins.signals.map(s => `<li>${s}</li>`).join('');
+
+  document.getElementById('insightContent').innerHTML = `
+    <div class="section-label" style="color:${t.color}">Your insight — ${t.label}</div>
+    <h2 class="section-title" style="margin-bottom:32px">${ins.whatItIs}</h2>
+
+    <div class="insight-card">
+      <div class="insight-label">What's happening</div>
+      <div class="insight-body">${ins.explanation}</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-label">Common signals</div>
+      <ul class="signal-list">${signalsHTML}</ul>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-label">What you can do</div>
+      <div class="action-grid">${actionsHTML}</div>
+    </div>
+
+    <div class="crisis-banner">
+      <div class="icon">🆘</div>
+      <div class="crisis-text">
+        <strong>If things ever feel overwhelming or unsafe</strong> — please reach out immediately.
+        Crisis Text Line: text <strong>HOME to 741741</strong>. Call or text <strong>988</strong> (Suicide & Crisis Lifeline). You matter, and help is available.
+      </div>
+    </div>
+  `;
+
+  showScreen('insight');
+}
+</script>
+</body>
+</html>
