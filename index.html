@@ -4,525 +4,540 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unmuted — Teen Mental Health</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0e0e14;
-    --surface: #16161f;
-    --surface2: #1e1e2a;
-    --border: #2a2a3a;
-    --text: #f0eef8;
-    --muted: #8884a0;
-    --accent-teal: #5de0c8;
-    --accent-lavender: #a78bfa;
-    --accent-peach: #fda68a;
-    --accent-yellow: #f9e04b;
-    --anxiety: #5de0c8;
-    --depression: #a78bfa;
-    --burnout: #fda68a;
-    --help: #f9e04b;
-  }
+:root {
+  --bg: #f0edf8;
+  --surface: #ffffff;
+  --surface2: #f7f5fc;
+  --border: #e4dff2;
+  --text: #1e1a2e;
+  --muted: #7a7290;
+  --purple: #6c47b5;
+  --purple-light: #ede8fa;
+  --purple-mid: #b09de0;
+  --teal: #2a9d8f;
+  --teal-light: #d6f0ed;
+  --peach: #e07a5f;
+  --peach-light: #fbe8e3;
+  --gold: #d4a017;
+  --gold-light: #fdf3d6;
+  --blue: #457bb5;
+  --blue-light: #deeaf7;
+  --rose: #c96b8a;
+  --rose-light: #fce8ef;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* Ambient background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(93,224,200,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(167,139,250,0.07) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* Ambient mesh background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 10%, rgba(180,160,230,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 90% 20%, rgba(160,210,200,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 90%, rgba(230,180,160,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(160,185,230,0.15) 0%, transparent 55%);
+}
 
-  .screen { display: none; position: relative; z-index: 1; }
-  .screen.active { display: block; }
+.screen { display:none; position:relative; z-index:1; }
+.screen.active { display:block; }
 
-  /* ---- LANDING ---- */
-  #landing {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 24px;
-    text-align: center;
-  }
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+  background: rgba(240,237,248,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+@media(max-width:600px){ nav { padding: 0 18px; } }
 
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards 0.1s;
-  }
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px; color: var(--purple);
+  cursor: pointer; letter-spacing: -0.01em;
+}
+.nav-logo em { font-style: italic; color: var(--peach); }
 
-  .hero-tagline {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(38px, 7vw, 72px);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.3s;
-  }
+.nav-links { display:flex; gap:4px; }
+.nav-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 700;
+  padding: 7px 16px; border-radius: 100px;
+  border: 1.5px solid transparent;
+  background: transparent; color: var(--muted);
+  cursor: pointer; transition: all .2s;
+}
+.nav-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border); }
+.nav-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
 
-  .hero-tagline span {
-    background: linear-gradient(135deg, var(--accent-teal), var(--accent-lavender));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── SHARED ── */
+.page { padding-top: 64px; min-height: 100vh; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 56px 32px 80px; }
+@media(max-width:600px){ .wrap { padding: 48px 18px 60px; } }
 
-  .hero-sub {
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 420px;
-    line-height: 1.7;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.5s;
-  }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--purple);
+  margin-bottom: 16px;
+}
+.eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--purple); }
 
-  .btn-primary {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    padding: 16px 40px;
-    border-radius: 100px;
-    border: none;
-    background: linear-gradient(135deg, var(--accent-teal), var(--accent-lavender));
-    color: #0e0e14;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.7s;
-  }
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 400; line-height: 1.1;
+  letter-spacing: -0.02em; margin-bottom: 10px;
+}
+.page-title em { font-style: italic; color: var(--purple); }
 
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(93,224,200,0.25);
-  }
+.page-sub {
+  font-size: 16px; color: var(--muted);
+  line-height: 1.7; margin-bottom: 44px;
+}
 
-  .pill-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 48px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.9s;
-  }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  cursor: pointer; background: none; border: none;
+  font-family: 'Nunito', sans-serif;
+  transition: color .2s; padding: 0; margin-bottom: 28px;
+}
+.back-btn:hover { color: var(--purple); }
 
-  .pill {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    background: var(--surface);
-  }
+/* ── LANDING ── */
+#landing .page { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 64px 24px 60px; min-height: 100vh; }
 
-  /* ---- TOPIC SELECT ---- */
-  #topics {
-    min-height: 100vh;
-    padding: 60px 24px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--purple-light); color: var(--purple);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 6px 16px; border-radius: 100px;
+  margin-bottom: 28px;
+  opacity: 0; animation: popIn 0.5s ease forwards 0.1s;
+}
+.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--purple); }
 
-  .section-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(42px, 8vw, 80px);
+  font-weight: 400; line-height: 1.0;
+  letter-spacing: -0.02em; margin-bottom: 20px;
+  opacity: 0; animation: slideUp 0.6s ease forwards 0.25s;
+}
+.hero-title em { font-style: italic; color: var(--purple); }
 
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(26px, 4vw, 38px);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 10px;
-  }
+.hero-sub {
+  font-size: 17px; color: var(--muted); max-width: 440px;
+  line-height: 1.75; margin-bottom: 14px;
+  opacity: 0; animation: slideUp 0.6s ease forwards 0.4s;
+}
 
-  .section-sub {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 40px;
-  }
+.hero-byline {
+  font-size: 13px; color: var(--muted); margin-bottom: 36px;
+  opacity: 0; animation: slideUp 0.6s ease forwards 0.5s;
+}
+.hero-byline strong { color: var(--purple); font-weight: 800; }
 
-  .topic-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 40px;
-  }
+.hero-cta {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: slideUp 0.6s ease forwards 0.6s;
+}
 
-  @media (max-width: 480px) {
-    .topic-grid { grid-template-columns: 1fr; }
-  }
+.btn-primary {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 800;
+  padding: 14px 32px; border-radius: 100px;
+  border: none; background: var(--purple); color: white;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 20px rgba(108,71,181,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,71,181,0.35); }
 
-  .topic-card {
-    background: var(--surface);
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 28px 24px;
-    cursor: pointer;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
+.btn-secondary {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 700;
+  padding: 14px 28px; border-radius: 100px;
+  border: 2px solid var(--border); background: var(--surface); color: var(--text);
+  cursor: pointer; transition: all .2s;
+}
+.btn-secondary:hover { border-color: var(--purple-mid); transform: translateY(-2px); }
 
-  .topic-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.3s;
-    border-radius: 18px;
-  }
+.hero-stats {
+  display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+  margin-top: 48px;
+  opacity: 0; animation: slideUp 0.6s ease forwards 0.8s;
+}
+.stat-pill {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 100px; padding: 10px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px; color: var(--purple);
+}
+.stat-label { font-size: 12px; color: var(--muted); max-width: 120px; line-height: 1.4; }
 
-  .topic-card.anxiety::before { background: radial-gradient(ellipse at top left, rgba(93,224,200,0.12), transparent 70%); }
-  .topic-card.depression::before { background: radial-gradient(ellipse at top left, rgba(167,139,250,0.12), transparent 70%); }
-  .topic-card.burnout::before { background: radial-gradient(ellipse at top left, rgba(253,166,138,0.12), transparent 70%); }
-  .topic-card.help::before { background: radial-gradient(ellipse at top left, rgba(249,224,75,0.12), transparent 70%); }
+/* ── TOPIC GRID ── */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media(max-width:640px){ .topic-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width:400px){ .topic-grid { grid-template-columns: 1fr; } }
 
-  .topic-card:hover::before, .topic-card.selected::before { opacity: 1; }
+.topic-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 22px; padding: 24px 20px;
+  cursor: pointer; transition: all .22s;
+  position: relative; overflow: hidden;
+}
+.topic-card::after {
+  content: '';
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity .25s; border-radius: 20px;
+}
+.topic-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(108,71,181,0.12); }
+.topic-card:hover::after { opacity: 1; }
+.topic-card.selected { border-width: 2.5px; }
 
-  .topic-card:hover { transform: translateY(-3px); }
+/* per-topic colors */
+.tc-anxiety { --tc: #6c47b5; --tc-l: #ede8fa; }
+.tc-anxiety:hover, .tc-anxiety.selected { border-color: #6c47b5; }
+.tc-anxiety::after { background: radial-gradient(ellipse at top left, rgba(108,71,181,0.07), transparent 70%); }
 
-  .topic-card.anxiety.selected { border-color: var(--anxiety); }
-  .topic-card.depression.selected { border-color: var(--depression); }
-  .topic-card.burnout.selected { border-color: var(--burnout); }
-  .topic-card.help.selected { border-color: var(--help); }
+.tc-depression { --tc: #c96b8a; --tc-l: #fce8ef; }
+.tc-depression:hover, .tc-depression.selected { border-color: #c96b8a; }
+.tc-depression::after { background: radial-gradient(ellipse at top left, rgba(201,107,138,0.07), transparent 70%); }
 
-  .topic-icon {
-    font-size: 32px;
-    margin-bottom: 14px;
-    display: block;
-    position: relative;
-    z-index: 1;
-  }
+.tc-burnout { --tc: #2a9d8f; --tc-l: #d6f0ed; }
+.tc-burnout:hover, .tc-burnout.selected { border-color: #2a9d8f; }
+.tc-burnout::after { background: radial-gradient(ellipse at top left, rgba(42,157,143,0.07), transparent 70%); }
 
-  .topic-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    position: relative;
-    z-index: 1;
-  }
+.tc-perfectionism { --tc: #d4a017; --tc-l: #fdf3d6; }
+.tc-perfectionism:hover, .tc-perfectionism.selected { border-color: #d4a017; }
+.tc-perfectionism::after { background: radial-gradient(ellipse at top left, rgba(212,160,23,0.07), transparent 70%); }
 
-  .topic-card.anxiety .topic-name { color: var(--anxiety); }
-  .topic-card.depression .topic-name { color: var(--depression); }
-  .topic-card.burnout .topic-name { color: var(--burnout); }
-  .topic-card.help .topic-name { color: var(--help); }
+.tc-grief { --tc: #457bb5; --tc-l: #deeaf7; }
+.tc-grief:hover, .tc-grief.selected { border-color: #457bb5; }
+.tc-grief::after { background: radial-gradient(ellipse at top left, rgba(69,123,181,0.07), transparent 70%); }
 
-  .topic-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-    position: relative;
-    z-index: 1;
-  }
+.tc-help { --tc: #e07a5f; --tc-l: #fbe8e3; }
+.tc-help:hover, .tc-help.selected { border-color: #e07a5f; }
+.tc-help::after { background: radial-gradient(ellipse at top left, rgba(224,122,95,0.07), transparent 70%); }
 
-  /* ---- SCENARIO ---- */
-  #scenario {
-    min-height: 100vh;
-    padding: 60px 24px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
+.tc-icon-wrap {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+  background: var(--tc-l);
+  position: relative; z-index: 1;
+}
+.tc-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px; font-weight: 400;
+  margin-bottom: 6px; color: var(--tc);
+  position: relative; z-index: 1;
+}
+.tc-desc { font-size: 12px; color: var(--muted); line-height: 1.55; position: relative; z-index: 1; }
 
-  .progress-bar {
-    width: 100%;
-    height: 3px;
-    background: var(--border);
-    border-radius: 10px;
-    margin-bottom: 48px;
-    overflow: hidden;
-  }
+/* ── SCENARIO ── */
+#scenario .wrap { max-width: 660px; }
 
-  .progress-fill {
-    height: 100%;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-  }
+.prog-wrap { margin-bottom: 40px; }
+.prog-track { height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; margin-bottom: 8px; }
+.prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--purple), var(--purple-mid)); transition: width .5s ease; }
+.prog-label { font-size: 12px; font-weight: 700; color: var(--muted); }
 
-  .scenario-chip {
-    display: inline-block;
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 100px;
-    margin-bottom: 24px;
-  }
+.s-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 6px 16px;
+  border-radius: 100px; margin-bottom: 22px;
+}
 
-  .scenario-q {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(20px, 3.5vw, 28px);
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 32px;
-  }
+.s-question {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(20px, 3.5vw, 30px);
+  font-weight: 400; line-height: 1.3;
+  margin-bottom: 28px; color: var(--text);
+}
 
-  .choices {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+.choices { display:flex; flex-direction:column; gap:10px; }
+.choice-btn {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 16px; padding: 16px 20px;
+  text-align: left; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--text);
+  transition: all .2s; line-height: 1.5;
+  display: flex; align-items: center; gap: 12px;
+}
+.choice-btn::before {
+  content: '';
+  flex-shrink: 0; width: 18px; height: 18px;
+  border-radius: 50%; border: 2px solid var(--border);
+  transition: all .2s;
+}
+.choice-btn:hover {
+  border-color: var(--purple);
+  background: var(--purple-light);
+  transform: translateX(6px);
+}
+.choice-btn:hover::before { border-color: var(--purple); background: var(--purple); }
 
-  .choice-btn {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 22px;
-    text-align: left;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    line-height: 1.5;
-  }
+/* ── INSIGHT ── */
+#insight .wrap { max-width: 660px; }
 
-  .choice-btn:hover {
-    border-color: var(--accent-lavender);
-    background: var(--surface2);
-    transform: translateX(4px);
-  }
+.i-header { margin-bottom: 32px; }
+.i-chip { display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:6px 16px; border-radius:100px; margin-bottom:14px; }
+.i-title { font-family:'DM Serif Display',serif; font-size:clamp(22px,4vw,34px); line-height:1.15; color:var(--text); }
 
-  /* ---- INSIGHT ---- */
-  #insight {
-    min-height: 100vh;
-    padding: 60px 24px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
+.i-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 26px 24px;
+  margin-bottom: 12px;
+  animation: slideUp .45s ease forwards; opacity: 0;
+}
+.i-card:nth-child(1){ animation-delay:.05s; }
+.i-card:nth-child(2){ animation-delay:.15s; }
+.i-card:nth-child(3){ animation-delay:.25s; }
 
-  .insight-card {
-    background: var(--surface);
-    border-radius: 24px;
-    padding: 36px 32px;
-    margin-bottom: 20px;
-    border: 1.5px solid var(--border);
-    animation: fadeUp 0.5s ease forwards;
-    opacity: 0;
-  }
+.i-card-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 14px; display:flex; align-items:center; gap:10px;
+}
+.i-card-label::after { content:''; flex:1; height:1px; background:var(--border); }
 
-  .insight-card:nth-child(2) { animation-delay: 0.15s; }
-  .insight-card:nth-child(3) { animation-delay: 0.3s; }
+.i-body { font-size:15px; color:#4a4560; line-height:1.8; }
 
-  .insight-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
+.signal-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.signal-list li {
+  font-size: 14px; color: var(--text);
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--surface2);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.5;
+}
+.signal-list li::before {
+  content: ''; flex-shrink:0;
+  width: 7px; height: 7px; border-radius: 50%;
+  margin-top: 5px;
+}
 
-  .insight-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 14px;
-    line-height: 1.2;
-  }
+.action-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+@media(max-width:500px){ .action-row{grid-template-columns:1fr;} }
+.a-tile {
+  border-radius: 16px; padding: 18px 14px; text-align:center;
+  border: 1.5px solid var(--border); background: var(--surface2);
+  transition: transform .2s;
+}
+.a-tile:hover { transform: translateY(-3px); }
+.a-icon-wrap { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 10px; }
+.a-label { font-family:'DM Serif Display',serif; font-size:14px; margin-bottom:5px; color:var(--text); }
+.a-sub { font-size:11px; color:var(--muted); line-height:1.5; }
 
-  .insight-body {
-    font-size: 15px;
-    color: #c4c0d8;
-    line-height: 1.75;
-    margin-bottom: 20px;
-  }
+.crisis-card {
+  border-radius: 18px; padding: 20px 22px;
+  display:flex; gap:14px; align-items:flex-start;
+  margin-top: 12px;
+  background: var(--gold-light);
+  border: 1.5px solid rgba(212,160,23,.3);
+}
+.crisis-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+.crisis-text { font-size:14px; color:#4a4028; line-height:1.7; }
+.crisis-text strong { color:#7a5a00; font-weight:800; }
 
-  .signal-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+.i-nav { display:flex; gap:10px; margin-top:26px; flex-wrap:wrap; }
+.btn-outline {
+  font-family:'Nunito',sans-serif; font-size:13px; font-weight:700;
+  padding:11px 22px; border-radius:100px;
+  border:2px solid var(--border); background:var(--surface); color:var(--muted);
+  cursor:pointer; transition:all .2s;
+}
+.btn-outline:hover { border-color:var(--purple); color:var(--purple); }
 
-  .signal-list li {
-    font-size: 14px;
-    color: var(--muted);
-    padding-left: 20px;
-    position: relative;
-    line-height: 1.5;
-  }
+/* ── TRACKER ── */
+.mood-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:22px 0; }
+.mood-btn {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:18px; padding:18px 6px; cursor:pointer;
+  text-align:center; transition:all .2s;
+  font-family:'Nunito',sans-serif;
+}
+.mood-btn:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(108,71,181,.12); }
+.mood-btn.sel { border-color:var(--purple); background:var(--purple-light); }
+.m-emoji { font-size:28px; display:block; margin-bottom:6px; }
+.m-label { font-size:11px; color:var(--muted); font-weight:700; }
 
-  .signal-list li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--accent-teal);
-  }
+.mood-note {
+  width:100%; background:var(--surface); border:2px solid var(--border);
+  border-radius:14px; padding:14px 16px; color:var(--text);
+  font-family:'Nunito',sans-serif; font-size:14px;
+  resize:none; margin-bottom:16px; outline:none; transition:border-color .2s;
+}
+.mood-note:focus { border-color:var(--purple); }
+.mood-note::placeholder { color:var(--muted); }
 
-  .action-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin-top: 8px;
-  }
+.log-btn {
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:800;
+  padding:13px 32px; border-radius:100px; border:none;
+  background:var(--purple); color:white; cursor:pointer;
+  transition:all .2s; box-shadow:0 4px 16px rgba(108,71,181,.25);
+}
+.log-btn:hover { transform:translateY(-1px); box-shadow:0 6px 22px rgba(108,71,181,.3); }
+.log-btn:disabled { opacity:.4; cursor:default; transform:none; box-shadow:none; }
 
-  @media (max-width: 480px) {
-    .action-grid { grid-template-columns: 1fr; }
-  }
+.chart-box { background:var(--surface); border:1.5px solid var(--border); border-radius:20px; padding:22px; margin-top:24px; }
+.chart-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.chart-heading { font-family:'DM Serif Display',serif; font-size:18px; color:var(--text); }
+.chart-avg { font-size:13px; color:var(--muted); font-weight:700; }
+.bars { display:flex; align-items:flex-end; gap:8px; height:72px; }
+.b-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.bar { width:100%; border-radius:6px 6px 0 0; min-height:4px; transition:height .5s ease; }
+.b-day { font-size:10px; color:var(--muted); font-weight:700; }
+.b-em { font-size:11px; }
 
-  .action-tile {
-    background: var(--surface2);
-    border-radius: 14px;
-    padding: 16px 14px;
-    text-align: center;
-  }
+.entries { margin-top:20px; display:flex; flex-direction:column; gap:10px; }
+.entry { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start; }
+.e-emoji { font-size:22px; flex-shrink:0; }
+.e-date { font-size:11px; color:var(--muted); font-weight:700; margin-bottom:3px; }
+.e-note { font-size:13px; color:#4a4560; line-height:1.5; }
+.empty-msg { text-align:center; padding:40px 0; color:var(--muted); font-size:14px; line-height:1.7; }
 
-  .action-tile .tile-icon { font-size: 24px; margin-bottom: 8px; }
+/* ── RESOURCES ── */
+.r-group { margin-bottom:32px; }
+.r-group-title {
+  font-size:11px; font-weight:800; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--purple);
+  margin-bottom:14px; padding-bottom:10px;
+  border-bottom:2px solid var(--purple-light);
+  display:flex; align-items:center; gap:8px;
+}
+.r-group-title .rdot { width:6px; height:6px; border-radius:50%; background:var(--purple); }
 
-  .action-tile .tile-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
+.r-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:18px; padding:18px 20px; margin-bottom:10px;
+  cursor:pointer; transition:all .2s; position:relative; overflow:hidden;
+}
+.r-card:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(108,71,181,.1); border-color:var(--purple-mid); }
+.r-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.r-tag { font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:100px; }
+.tag-free { background:var(--teal-light); color:var(--teal); }
+.tag-24h { background:var(--gold-light); color:var(--gold); }
+.tag-local { background:var(--peach-light); color:var(--peach); }
+.tag-online { background:var(--blue-light); color:var(--blue); }
+.r-name { font-family:'DM Serif Display',serif; font-size:17px; color:var(--text); margin-bottom:4px; }
+.r-detail { font-size:13px; color:var(--muted); line-height:1.55; }
 
-  .action-tile .tile-sub {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--purple); color:white;
+  border-radius:100px; padding:12px 24px;
+  font-size:13px; font-weight:700; z-index:200;
+  transition:transform .3s ease; white-space:nowrap;
+  font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 20px rgba(108,71,181,.35);
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
 
-  .crisis-banner {
-    background: rgba(249,224,75,0.08);
-    border: 1.5px solid rgba(249,224,75,0.25);
-    border-radius: 16px;
-    padding: 20px 22px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    margin-top: 20px;
-  }
-
-  .crisis-banner .icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-
-  .crisis-text { font-size: 14px; color: #e0daf0; line-height: 1.6; }
-  .crisis-text strong { color: var(--help); }
-
-  .nav-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
-
-  .btn-outline {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    padding: 12px 24px;
-    border-radius: 100px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .btn-outline:hover { border-color: var(--accent-lavender); color: var(--text); }
-
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--muted);
-    cursor: pointer;
-    margin-bottom: 32px;
-    background: none;
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-    transition: color 0.2s;
-    padding: 0;
-  }
-
-  .back-btn:hover { color: var(--text); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+@keyframes slideUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes popIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
 </style>
 </head>
 <body>
 
+<nav>
+  <div class="nav-logo" onclick="go('landing')">Un<em>muted</em></div>
+  <div class="nav-links">
+    <button class="nav-btn" id="nb-e" onclick="go('explore')">Explore</button>
+    <button class="nav-btn" id="nb-t" onclick="go('tracker')">Check-in</button>
+    <button class="nav-btn" id="nb-r" onclick="go('resources')">Resources</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
 <!-- LANDING -->
 <div id="landing" class="screen active">
-  <div class="logo">Unmuted</div>
-  <h1 class="hero-tagline">It's okay to<br><span>not be okay.</span></h1>
-  <p class="hero-sub">A space to understand what you're feeling — without the clinical jargon, and without judgment.</p>
-  <button class="btn-primary" onclick="showScreen('topics')">Explore What's Going On →</button>
-  <div class="pill-row">
-    <span class="pill">Made by a teen, for teens</span>
-    <span class="pill">No sign-up needed</span>
-    <span class="pill">Takes 3 minutes</span>
+  <div class="page">
+    <div class="hero-badge"><div class="badge-dot"></div>Teen Mental Health Literacy</div>
+    <h1 class="hero-title">It's okay<br>to not be <em>okay.</em></h1>
+    <p class="hero-sub">A space to understand what you're feeling — without the clinical jargon, and without judgment.</p>
+    <p class="hero-byline">Made by <strong>Nidhi Kaja</strong>, 9th grade · Owen J. Roberts High School</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="go('explore')">Explore what's going on →</button>
+      <button class="btn-secondary" onclick="go('resources')">Find support</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="stat-num">1 in 5</div><div class="stat-label">teens experience a mental health condition each year</div></div>
+      <div class="stat-pill"><div class="stat-num">3 min</div><div class="stat-label">to get a personalized insight</div></div>
+      <div class="stat-pill"><div class="stat-num">100%</div><div class="stat-label">private — nothing leaves your device</div></div>
+    </div>
   </div>
 </div>
 
-<!-- TOPIC SELECT -->
-<div id="topics" class="screen">
-  <div style="max-width:700px;margin:0 auto;padding:60px 24px;">
-    <button class="back-btn" onclick="showScreen('landing')">← Back</button>
-    <div class="section-label">Step 1 of 2</div>
-    <h2 class="section-title">What's been on your mind?</h2>
-    <p class="section-sub">Pick whatever feels closest. There's no wrong answer.</p>
-    <div class="topic-grid">
-      <div class="topic-card anxiety" onclick="selectTopic('anxiety')">
-        <span class="topic-icon">🌊</span>
-        <div class="topic-name">Anxiety & Stress</div>
-        <div class="topic-desc">Racing thoughts, worry you can't turn off, feeling on edge</div>
-      </div>
-      <div class="topic-card depression" onclick="selectTopic('depression')">
-        <span class="topic-icon">🌑</span>
-        <div class="topic-name">Low Mood</div>
-        <div class="topic-desc">Feeling flat, empty, or sad for longer than usual</div>
-      </div>
-      <div class="topic-card burnout" onclick="selectTopic('burnout')">
-        <span class="topic-icon">🪫</span>
-        <div class="topic-name">Burnout</div>
-        <div class="topic-desc">Exhausted, unmotivated, running on empty no matter how much you sleep</div>
-      </div>
-      <div class="topic-card help" onclick="selectTopic('help')">
-        <span class="topic-icon">🧭</span>
-        <div class="topic-name">Getting Help</div>
-        <div class="topic-desc">Not sure who to talk to or how to start that conversation</div>
+<!-- EXPLORE -->
+<div id="explore" class="screen">
+  <div class="page">
+    <div class="wrap">
+      <div class="eyebrow"><div class="eyebrow-dot"></div>What's going on?</div>
+      <h2 class="page-title">Pick what feels <em>closest.</em></h2>
+      <p class="page-sub">There's no wrong answer — choose whatever resonates right now.</p>
+      <div class="topic-grid">
+        <div class="topic-card tc-anxiety" onclick="pick('anxiety')">
+          <div class="tc-icon-wrap">🌊</div>
+          <div class="tc-name">Anxiety & Stress</div>
+          <div class="tc-desc">Racing thoughts, worry you can't turn off, feeling on edge</div>
+        </div>
+        <div class="topic-card tc-depression" onclick="pick('depression')">
+          <div class="tc-icon-wrap">🌑</div>
+          <div class="tc-name">Low Mood</div>
+          <div class="tc-desc">Feeling flat, empty, or sad for longer than usual</div>
+        </div>
+        <div class="topic-card tc-burnout" onclick="pick('burnout')">
+          <div class="tc-icon-wrap">🪫</div>
+          <div class="tc-name">Burnout</div>
+          <div class="tc-desc">Exhausted and unmotivated no matter how much you rest</div>
+        </div>
+        <div class="topic-card tc-perfectionism" onclick="pick('perfectionism')">
+          <div class="tc-icon-wrap">📐</div>
+          <div class="tc-name">Perfectionism</div>
+          <div class="tc-desc">Nothing ever feels good enough, including yourself</div>
+        </div>
+        <div class="topic-card tc-grief" onclick="pick('grief')">
+          <div class="tc-icon-wrap">🌧️</div>
+          <div class="tc-name">Grief & Loss</div>
+          <div class="tc-desc">Processing loss of a person, relationship, or identity</div>
+        </div>
+        <div class="topic-card tc-help" onclick="pick('help')">
+          <div class="tc-icon-wrap">🧭</div>
+          <div class="tc-name">Getting Help</div>
+          <div class="tc-desc">Not sure who to talk to or how to start that conversation</div>
+        </div>
       </div>
     </div>
   </div>
@@ -530,296 +545,290 @@
 
 <!-- SCENARIO -->
 <div id="scenario" class="screen">
-  <div style="max-width:640px;margin:0 auto;padding:60px 24px;">
-    <button class="back-btn" onclick="showScreen('topics')">← Back</button>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    <div id="scenarioChip" class="scenario-chip"></div>
-    <div id="scenarioQ" class="scenario-q"></div>
-    <div id="scenarioChoices" class="choices"></div>
+  <div class="page">
+    <div class="wrap">
+      <button class="back-btn" onclick="go('explore')">← Back</button>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        <div class="prog-label" id="progLabel">Question 1 of 3</div>
+      </div>
+      <div class="s-chip" id="sChip"></div>
+      <div class="s-question" id="sQ"></div>
+      <div class="choices" id="sChoices"></div>
+    </div>
   </div>
 </div>
 
 <!-- INSIGHT -->
 <div id="insight" class="screen">
-  <div style="max-width:640px;margin:0 auto;padding:60px 24px;">
-    <button class="back-btn" onclick="showScreen('topics')">← Try another topic</button>
-    <div id="insightContent"></div>
-    <div class="nav-row">
-      <button class="btn-outline" onclick="showScreen('topics')">Explore another topic</button>
-      <button class="btn-primary" onclick="showScreen('landing')" style="opacity:1;animation:none;">Start over</button>
+  <div class="page">
+    <div class="wrap">
+      <button class="back-btn" onclick="go('explore')">← Try another topic</button>
+      <div id="iContent"></div>
+      <div class="i-nav">
+        <button class="btn-outline" onclick="go('explore')">Try another topic</button>
+        <button class="btn-outline" onclick="go('tracker')">Log how I'm feeling</button>
+        <button class="btn-outline" onclick="go('resources')">Find local support</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACKER -->
+<div id="tracker" class="screen">
+  <div class="page">
+    <div class="wrap" style="max-width:660px">
+      <div class="eyebrow"><div class="eyebrow-dot"></div>Daily Check-in</div>
+      <h2 class="page-title">How are you <em>feeling</em> today?</h2>
+      <p class="page-sub">Completely private — nothing leaves your device.</p>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="pickMood(1,this)"><span class="m-emoji">😔</span><span class="m-label">Struggling</span></div>
+        <div class="mood-btn" onclick="pickMood(2,this)"><span class="m-emoji">😕</span><span class="m-label">Low</span></div>
+        <div class="mood-btn" onclick="pickMood(3,this)"><span class="m-emoji">😐</span><span class="m-label">Okay</span></div>
+        <div class="mood-btn" onclick="pickMood(4,this)"><span class="m-emoji">🙂</span><span class="m-label">Good</span></div>
+        <div class="mood-btn" onclick="pickMood(5,this)"><span class="m-emoji">😄</span><span class="m-label">Great</span></div>
+      </div>
+      <textarea class="mood-note" id="mNote" rows="3" placeholder="Anything on your mind? (optional)"></textarea>
+      <button class="log-btn" id="logBtn" onclick="saveM()" disabled>Save check-in</button>
+      <div class="chart-box" id="chartBox" style="display:none">
+        <div class="chart-head">
+          <div class="chart-heading">Recent check-ins</div>
+          <div class="chart-avg" id="cAvg"></div>
+        </div>
+        <div class="bars" id="cBars"></div>
+      </div>
+      <div class="entries" id="entryList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCES -->
+<div id="resources" class="screen">
+  <div class="page">
+    <div class="wrap" style="max-width:660px">
+      <div class="eyebrow"><div class="eyebrow-dot"></div>You Are Not Alone</div>
+      <h2 class="page-title">Get <em>support.</em></h2>
+      <p class="page-sub">Real resources — free, confidential, and actually accessible.</p>
+      <div class="r-group">
+        <div class="r-group-title"><div class="rdot"></div>Crisis support</div>
+        <div class="r-card" onclick="ol('tel:988')"><div class="r-tags"><span class="r-tag tag-free">Free</span><span class="r-tag tag-24h">24/7</span></div><div class="r-name">988 Suicide & Crisis Lifeline</div><div class="r-detail">Call or text 988 anytime. Confidential support for any mental health crisis — you don't have to be suicidal to call.</div></div>
+        <div class="r-card" onclick="ol('sms:741741')"><div class="r-tags"><span class="r-tag tag-free">Free</span><span class="r-tag tag-24h">24/7</span></div><div class="r-name">Crisis Text Line</div><div class="r-detail">Text HOME to 741741. Text-based support when talking out loud feels too hard.</div></div>
+      </div>
+      <div class="r-group">
+        <div class="r-group-title"><div class="rdot"></div>Local — Pottstown & surrounding area</div>
+        <div class="r-card" onclick="ol('https://www.pottstownhospital.com')"><div class="r-tags"><span class="r-tag tag-local">Local</span></div><div class="r-name">Pottstown Hospital — Behavioral Health</div><div class="r-detail">1600 E. High St, Pottstown, PA. Behavioral health services and crisis evaluation.</div></div>
+        <div class="r-card" onclick="ol('https://hcaphoenixville.org')"><div class="r-tags"><span class="r-tag tag-local">Local</span><span class="r-tag tag-free">Free</span></div><div class="r-name">HCA Phoenixville</div><div class="r-detail">Free healthcare including mental health support for uninsured community members.</div></div>
+        <div class="r-card"><div class="r-tags"><span class="r-tag tag-local">Local</span></div><div class="r-name">OJR School Counselors</div><div class="r-detail">Owen J. Roberts High School counseling office. Walk in or email — you don't need a "big enough" reason to reach out.</div></div>
+      </div>
+      <div class="r-group">
+        <div class="r-group-title"><div class="rdot"></div>Online & self-guided</div>
+        <div class="r-card" onclick="ol('https://teenmentalhealth.org')"><div class="r-tags"><span class="r-tag tag-online">Online</span><span class="r-tag tag-free">Free</span></div><div class="r-name">Teen Mental Health</div><div class="r-detail">Evidence-based mental health information written specifically for teenagers.</div></div>
+        <div class="r-card" onclick="ol('https://www.nimh.nih.gov/health/find-help')"><div class="r-tags"><span class="r-tag tag-online">Online</span><span class="r-tag tag-free">Free</span></div><div class="r-name">NIMH — Find Help</div><div class="r-detail">National Institute of Mental Health's guide to finding mental health support near you.</div></div>
+      </div>
+      <div class="crisis-card"><div class="crisis-icon">🆘</div><div class="crisis-text"><strong>If you're in immediate danger</strong> — call 911 or go to your nearest ER. For any mental health crisis, call or text <strong>988</strong>. You matter and help is available right now.</div></div>
     </div>
   </div>
 </div>
 
 <script>
-const topics = {
-  anxiety: {
-    color: '#5de0c8',
-    chipBg: 'rgba(93,224,200,0.12)',
-    label: 'Anxiety & Stress',
-    scenarios: [
-      {
-        q: "You have a big test tomorrow. You've studied, but your brain won't stop spinning through worst-case scenarios. You:",
-        choices: [
-          "Can't sleep — I keep imagining failing even though I know the material",
-          "Feel physically sick — stomach tight, heart racing",
-          "Keep studying even though I know it won't help at this point",
-          "This happens with everything, not just tests"
-        ]
-      },
-      {
-        q: "At lunch, you suddenly feel really self-conscious — like everyone is looking at you and judging. You:",
-        choices: [
-          "Leave and eat alone somewhere else",
-          "Stay but feel frozen, can't join the conversation",
-          "Replay the whole thing later and cringe",
-          "This feeling follows me everywhere"
-        ]
-      }
+const T = {
+  anxiety:{
+    color:'#6c47b5',bg:'#ede8fa',label:'Anxiety & Stress',
+    sigColor:'#6c47b5',actBg:'#ede8fa',
+    scenarios:[
+      {q:"You have a big test tomorrow. You've studied, but your brain won't stop spinning. You:",ch:["Can't sleep — keep imagining failing even though I know the material","Feel physically sick — stomach tight, heart racing","Keep re-studying even though I know it won't help","This happens with everything, not just tests"]},
+      {q:"At lunch you suddenly feel self-conscious — like everyone is judging you. You:",ch:["Leave and eat somewhere alone","Stay but feel frozen, can't join the conversation","Replay the whole thing later and cringe for hours","This feeling follows me into every social situation"]},
+      {q:"You're given a big project due in three weeks. Right now you feel:",ch:["Paralyzed — what if it's not good enough?","Already catastrophizing about every way it could go wrong","Avoiding thinking about it until the panic sets in","Physically tense just reading this question"]}
     ],
-    insight: {
-      whatItIs: "Anxiety is your brain's threat-detection system working overtime.",
-      explanation: "When you feel anxious, your body releases stress hormones that cause physical symptoms — racing heart, tight stomach, difficulty breathing. This is the 'fight or flight' response. It evolved to protect you from real danger, but sometimes it misfires in everyday situations like tests or social settings.",
-      signals: [
-        "Racing or looping thoughts you can't stop",
-        "Physical tension — jaw, shoulders, stomach",
-        "Avoiding things to escape the worried feeling",
-        "Reassurance-seeking that only helps briefly",
-        "Trouble sleeping because your mind won't quiet"
-      ],
-      actions: [
-        { icon: "🫁", label: "Right now", sub: "Box breathing: in 4s, hold 4s, out 4s, hold 4s. Repeat 4x." },
-        { icon: "📓", label: "This week", sub: "Write down the worry, then write one realistic counter-thought." },
-        { icon: "🧑‍⚕️", label: "Longer term", sub: "A therapist can teach CBT skills that actually rewire anxious thinking." }
-      ]
-    }
+    ins:{h:"Anxiety is your brain's threat-detection system working overtime.",b:"When you feel anxious, your body releases stress hormones — racing heart, tight stomach, shallow breathing. This is your fight-or-flight response. It evolved to protect you from real danger, but it misfires in everyday situations like tests, social settings, and big assignments.",sig:["Racing or looping thoughts you can't stop","Physical tension in your jaw, shoulders, or stomach","Avoiding situations to escape the worried feeling","Reassurance-seeking that only helps briefly","Trouble sleeping because your mind won't quiet"],acts:[{i:"🫁",l:"Right now",s:"Box breathing: in 4s, hold 4s, out 4s. Repeat 4 times."},{i:"📓",l:"This week",s:"Write the worry down, then one realistic counter-thought."},{i:"🧑‍⚕️",l:"Longer term",s:"A therapist can teach CBT skills that rewire anxious thinking."}]}
   },
-  depression: {
-    color: '#a78bfa',
-    chipBg: 'rgba(167,139,250,0.12)',
-    label: 'Low Mood',
-    scenarios: [
-      {
-        q: "Things you used to love — music, your friends, your hobbies — just feel... meh. How long has this been going on?",
-        choices: [
-          "A few days, usually passes",
-          "Most of this month honestly",
-          "Hard to remember the last time I felt excited about something",
-          "I still enjoy things sometimes, but something feels off"
-        ]
-      },
-      {
-        q: "Someone asks 'how are you?' You think:",
-        choices: [
-          "'Fine' — easier than explaining the weight I'm carrying",
-          "I genuinely don't know how I am",
-          "Hollow. Like I'm watching my own life from a distance",
-          "I don't want to burden anyone"
-        ]
-      }
+  depression:{
+    color:'#c96b8a',bg:'#fce8ef',label:'Low Mood',sigColor:'#c96b8a',actBg:'#fce8ef',
+    scenarios:[
+      {q:"Things you used to love — music, friends, hobbies — just feel... meh. How long has this been going on?",ch:["A few days, usually passes","Most of this month honestly","Hard to remember the last time I felt genuinely excited","I still enjoy things sometimes but something feels off"]},
+      {q:"Someone asks 'how are you?' You think:",ch:["'Fine' — easier than explaining the weight I'm carrying","I genuinely don't know how I am","Hollow — like I'm watching my own life from a distance","I don't want to burden anyone with this"]},
+      {q:"When you wake up in the morning, your first feeling is usually:",ch:["Dread about the day ahead","Complete exhaustion even after sleeping","Numbness — just going through the motions","A heaviness I can't quite explain"]}
     ],
-    insight: {
-      whatItIs: "Low mood that lingers is worth taking seriously — it's not weakness.",
-      explanation: "When sadness or emptiness sticks around for weeks and starts getting in the way of daily life, it might be depression. Depression isn't just 'feeling sad' — it often shows up as numbness, difficulty concentrating, losing interest in things you used to like, or feeling disconnected from yourself and others.",
-      signals: [
-        "Losing interest in activities that used to feel meaningful",
-        "Low energy even after sleeping",
-        "Feeling empty, numb, or detached — not necessarily 'sad'",
-        "Difficulty concentrating or making decisions",
-        "Negative self-talk that feels very convincing"
-      ],
-      actions: [
-        { icon: "🚶", label: "Right now", sub: "A 10-min walk outside can genuinely shift brain chemistry. Low bar, real effect." },
-        { icon: "💬", label: "This week", sub: "Tell one trusted person — a friend, parent, or counselor — how you've been feeling." },
-        { icon: "🧑‍⚕️", label: "Longer term", sub: "Therapy (especially CBT or talk therapy) is highly effective. You don't have to feel this way." }
-      ]
-    }
+    ins:{h:"Low mood that lingers is worth taking seriously — it's not weakness.",b:"Depression isn't just feeling sad. It often shows up as numbness, difficulty concentrating, losing interest in things you used to love, or feeling disconnected from yourself. When it sticks around for weeks and starts affecting daily life, it's worth getting support.",sig:["Losing interest in things that used to feel meaningful","Low energy even after enough sleep","Feeling empty, numb, or detached — not necessarily sad","Difficulty concentrating or making decisions","Negative self-talk that feels very convincing"],acts:[{i:"🚶",l:"Right now",s:"A 10-minute walk outside can genuinely shift brain chemistry."},{i:"💬",l:"This week",s:"Tell one trusted person how you've actually been feeling."},{i:"🧑‍⚕️",l:"Longer term",s:"Therapy is highly effective — you don't have to feel this way."}]}
   },
-  burnout: {
-    color: '#fda68a',
-    chipBg: 'rgba(253,166,138,0.12)',
-    label: 'Burnout',
-    scenarios: [
-      {
-        q: "It's Sunday night. You have homework, a club meeting tomorrow, and a college prep thing this week. You feel:",
-        choices: [
-          "Completely flat — no energy to care about any of it",
-          "Resentful of things I used to be excited about",
-          "Like I'm just going through the motions",
-          "Guilty that I'm not doing more, but unable to start"
-        ]
-      },
-      {
-        q: "When was the last time you did something just because you wanted to — no grades, no resume, no obligation?",
-        choices: [
-          "I honestly can't remember",
-          "I try to but feel guilty the whole time",
-          "Even my hobbies feel like tasks now",
-          "Rest feels productive only if I 'earned' it"
-        ]
-      }
+  burnout:{
+    color:'#2a9d8f',bg:'#d6f0ed',label:'Burnout',sigColor:'#2a9d8f',actBg:'#d6f0ed',
+    scenarios:[
+      {q:"It's Sunday night. You have homework, a club meeting, and three other obligations. You feel:",ch:["Completely flat — no energy to care about any of it","Resentful of things I used to be excited about","Like I'm just going through the motions","Guilty I'm not doing more, but unable to start"]},
+      {q:"When was the last time you did something just because you wanted to — no grades, no resume, no obligation?",ch:["I honestly can't remember","I try to but feel guilty the whole time","Even my hobbies feel like tasks now","Rest only feels okay if I've 'earned' it"]},
+      {q:"How do you feel about your activities and commitments right now?",ch:["Trapped — like I can't say no to anything","Resentful that I signed up for all of this","Like a robot completing tasks","I've stopped caring whether I do them well"]}
     ],
-    insight: {
-      whatItIs: "Burnout is what happens when your output has exceeded your input for too long.",
-      explanation: "Burnout isn't laziness. It's exhaustion that goes deeper than sleep can fix — physical, emotional, and motivational. High-achieving teens are especially vulnerable because the pressure to do more is constant. Your brain and body are telling you something real: the pace is unsustainable.",
-      signals: [
-        "Chronic exhaustion that sleep doesn't fix",
-        "Feeling detached or cynical about school, activities, or people",
-        "Decreased performance despite maximum effort",
-        "Irritability or emotional numbness",
-        "Lost sense of why any of it matters"
-      ],
-      actions: [
-        { icon: "🛑", label: "Right now", sub: "Identify one thing you can drop or reduce this week. Seriously — one thing." },
-        { icon: "🌿", label: "This week", sub: "Schedule one hour of unstructured time with zero productivity expectations." },
-        { icon: "🗣️", label: "Longer term", sub: "Talk to a counselor about workload and boundaries — they can help you prioritize without guilt." }
-      ]
-    }
+    ins:{h:"Burnout is what happens when your output exceeds your input for too long.",b:"Burnout isn't laziness — it's exhaustion that goes deeper than sleep can fix. Physical, emotional, and motivational. High-achieving students are especially vulnerable because the pressure to do more is relentless. Your brain and body are telling you something real: the pace is unsustainable.",sig:["Chronic exhaustion that sleep doesn't fix","Feeling detached or cynical about school and activities","Decreased performance despite maximum effort","Irritability or emotional numbness","Lost sense of why any of it matters"],acts:[{i:"🛑",l:"Right now",s:"Identify one thing you can drop or reduce this week. One thing."},{i:"🌿",l:"This week",s:"Schedule one hour of unstructured time with zero expectations."},{i:"🗣️",l:"Longer term",s:"A counselor can help you set boundaries without guilt."}]}
   },
-  help: {
-    color: '#f9e04b',
-    chipBg: 'rgba(249,224,75,0.1)',
-    label: 'Getting Help',
-    scenarios: [
-      {
-        q: "You know you probably need to talk to someone. What's stopping you?",
-        choices: [
-          "I don't want to worry my parents",
-          "Feels like my problems aren't 'bad enough' to warrant help",
-          "I don't know who to go to or what to say",
-          "Worried people will see me differently"
-        ]
-      },
-      {
-        q: "Which feels most true about therapy or counseling?",
-        choices: [
-          "It's for people who are seriously struggling — not me",
-          "I'd want to try it but don't know how to start",
-          "I've thought about it but feel embarrassed",
-          "I don't think talking would actually help"
-        ]
-      }
+  perfectionism:{
+    color:'#d4a017',bg:'#fdf3d6',label:'Perfectionism',sigColor:'#d4a017',actBg:'#fdf3d6',
+    scenarios:[
+      {q:"You get a 94% on a test. Your first reaction is:",ch:["Disappointment — what did I miss?","Already thinking about how to do better next time","Anxious this will bring my grade down","I can't let anyone know I didn't get 100%"]},
+      {q:"When you make a mistake — even a small one — you:",ch:["Replay it over and over for days","Feel like it defines your worth as a person","Apologize excessively even when it doesn't warrant it","Hide it so no one sees you as less capable"]},
+      {q:"Starting a new assignment feels:",ch:["Paralyzing — what if the result isn't perfect?","Like I need a perfect plan before I can begin","Scary because I'll have to show people my work","Exhausting because I'll obsess over every detail"]}
     ],
-    insight: {
-      whatItIs: "Asking for help is one of the hardest and most courageous things you can do.",
-      explanation: "Most people who seek mental health support do so before things become a crisis — because they notice something is off and they want to feel better. You don't need to be 'bad enough' to deserve support. The bar is simply: you're struggling, and you'd like help. That's it.",
-      signals: [
-        "You've been thinking about this for a while",
-        "Things you've tried on your own haven't fully worked",
-        "It's affecting school, relationships, or daily life",
-        "You're feeling this way more often than not",
-        "You're reading this right now — that's a sign"
-      ],
-      actions: [
-        { icon: "📝", label: "This week", sub: "Text or email your school counselor. You can literally say: 'I've been struggling and want to talk.'" },
-        { icon: "📱", label: "Crisis line", sub: "Crisis Text Line: text HOME to 741741. Free, confidential, 24/7." },
-        { icon: "👩‍👧", label: "Trusted adult", sub: "Pick one person — parent, teacher, coach — and share one sentence about how you've been feeling." }
-      ]
-    }
+    ins:{h:"Perfectionism isn't high standards — it's tying your worth to your performance.",b:"Healthy ambition pushes you forward. Perfectionism holds you back. When every mistake feels like proof you're not good enough, the bar keeps moving and you never get to feel proud. Over time, this is just as exhausting as any other mental health struggle.",sig:["Procrastinating to avoid producing imperfect work","Difficulty finishing things because they're never done","Excessive self-criticism after normal mistakes","Constantly comparing your output to others","Fear of being seen as less capable or together"],acts:[{i:"✏️",l:"Right now",s:"Write one thing you did well today — imperfect as it was."},{i:"🎯",l:"This week",s:"Submit something 'good enough' on purpose. Notice what happens."},{i:"🧑‍⚕️",l:"Longer term",s:"CBT therapy specifically targets perfectionist thinking."}]}
+  },
+  grief:{
+    color:'#457bb5',bg:'#deeaf7',label:'Grief & Loss',sigColor:'#457bb5',actBg:'#deeaf7',
+    scenarios:[
+      {q:"You've experienced a significant loss. What feels most true about how you're processing it?",ch:["I don't know how to feel — the emotions don't make sense","I'm fine most of the time and then suddenly not fine at all","I feel guilty for still having good moments","Everyone expects me to be 'over it' by now"]},
+      {q:"When the grief hits, it usually feels like:",ch:["A wave that knocks you over out of nowhere","A heavy weight you're always carrying","Numbness — not fully present anywhere","Anger at things that aren't really the problem"]},
+      {q:"What's hardest about this right now?",ch:["No one around me understands","I don't know how to talk about it","Life keeps moving and I'm not ready to","I'm scared the feeling will never get better"]}
+    ],
+    ins:{h:"Grief is love with nowhere to go — it doesn't follow a timeline.",b:"Loss changes you. Whether you've lost a person, a friendship, a version of yourself, or something else — grief is real and it doesn't follow a straight line. You don't get over it. You learn to carry it differently. And there's no correct way to grieve.",sig:["Waves of sadness, anger, or numbness at unexpected moments","Difficulty concentrating or finding meaning in daily life","Withdrawing from people who don't understand","Physical symptoms — fatigue, changes in sleep or appetite","Feeling like part of you is missing"],acts:[{i:"🕯️",l:"Right now",s:"Let yourself feel it for even 5 minutes. Grief needs witness."},{i:"🤝",l:"This week",s:"Tell one trusted person: 'I'm not okay right now.'"},{i:"💙",l:"Longer term",s:"Grief counseling is designed for exactly this."}]}
+  },
+  help:{
+    color:'#e07a5f',bg:'#fbe8e3',label:'Getting Help',sigColor:'#e07a5f',actBg:'#fbe8e3',
+    scenarios:[
+      {q:"You know you probably need to talk to someone. What's stopping you?",ch:["I don't want to worry my parents","My problems don't feel 'bad enough'","I don't know who to go to or what to say","Worried people will see me differently"]},
+      {q:"Which feels most true about therapy or counseling?",ch:["It's for people who are really struggling — not me","I'd want to try it but don't know how to start","I've thought about it but feel embarrassed","I don't think talking would actually help"]},
+      {q:"The idea of asking for help feels:",ch:["Scary — what if they can't actually help?","Like admitting weakness or failure","Selfish — other people have it worse","Like I'd finally be taking care of myself"]}
+    ],
+    ins:{h:"Asking for help is one of the hardest and most courageous things you can do.",b:"Most people who seek mental health support do so before things become a crisis — because they notice something is off and want to feel better. You don't need to be 'bad enough' to deserve support. The bar is simply: you're struggling, and you'd like help.",sig:["You've been thinking about this for a while","Things you've tried on your own haven't fully worked","It's affecting school, relationships, or daily life","You're feeling this way more often than not","You're reading this right now — that's already a sign"],acts:[{i:"📝",l:"This week",s:"Email your school counselor: 'I've been struggling and want to talk.'"},{i:"📱",l:"Crisis line",s:"Text HOME to 741741. Free, confidential, 24/7."},{i:"👩‍👧",l:"One adult",s:"Pick one person and share one sentence about how you've been feeling."}]}
   }
 };
 
-let currentTopic = null;
-let currentScenario = 0;
+const ME=['','😔','😕','😐','🙂','😄'];
+const MC=['','#c96b8a','#457bb5','#d4a017','#2a9d8f','#6c47b5'];
+let cur=null, sc=0, selMood=null;
+let log=JSON.parse(localStorage.getItem('unmuted_a')||'[]');
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
+  ['e','t','r'].forEach(k=>document.getElementById('nb-'+k).classList.remove('active'));
+  const m={explore:'nb-e',tracker:'nb-t',resources:'nb-r'};
+  if(m[id]) document.getElementById(m[id]).classList.add('active');
+  if(id==='tracker') renderTracker();
+}
+function ol(u){window.open(u,'_blank');}
+
+function pick(t){
+  document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'));
+  document.querySelector('.tc-'+t).classList.add('selected');
+  cur=t; sc=0; setTimeout(loadSc,180);
 }
 
-function selectTopic(topic) {
-  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
-  document.querySelector(`.topic-card.${topic}`).classList.add('selected');
-  currentTopic = topic;
-  currentScenario = 0;
-  setTimeout(() => loadScenario(), 150);
-}
-
-function loadScenario() {
-  const t = topics[currentTopic];
-  const s = t.scenarios[currentScenario];
-  const total = t.scenarios.length;
-  const pct = (currentScenario / total) * 100;
-
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressFill').style.background = `linear-gradient(90deg, ${t.color}, ${t.color}aa)`;
-
-  const chip = document.getElementById('scenarioChip');
-  chip.textContent = t.label;
-  chip.style.background = t.chipBg;
-  chip.style.color = t.color;
-  chip.style.border = `1px solid ${t.color}44`;
-
-  document.getElementById('scenarioQ').textContent = s.q;
-
-  const choicesEl = document.getElementById('scenarioChoices');
-  choicesEl.innerHTML = '';
-  s.choices.forEach(c => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = c;
-    btn.onclick = () => advanceScenario();
-    choicesEl.appendChild(btn);
+function loadSc(){
+  const t=T[cur], s=t.scenarios[sc], tot=t.scenarios.length;
+  const pct=Math.round((sc/tot)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent=`Question ${sc+1} of ${tot}`;
+  const chip=document.getElementById('sChip');
+  chip.textContent=t.label;
+  chip.style.background=t.bg; chip.style.color=t.color;
+  chip.style.border=`2px solid ${t.color}33`;
+  document.getElementById('sQ').textContent=s.q;
+  const el=document.getElementById('sChoices'); el.innerHTML='';
+  s.ch.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='choice-btn'; b.textContent=c;
+    b.onclick=()=>adv();
+    el.appendChild(b);
   });
-
-  showScreen('scenario');
+  go('scenario');
 }
 
-function advanceScenario() {
-  currentScenario++;
-  if (currentScenario < topics[currentTopic].scenarios.length) {
-    document.getElementById('progressFill').style.width = (currentScenario / topics[currentTopic].scenarios.length * 100) + '%';
-    loadScenario();
+function adv(){
+  sc++;
+  if(sc<T[cur].scenarios.length){ loadSc(); }
+  else { buildInsight(); }
+}
+
+function buildInsight(){
+  const t=T[cur], ins=t.ins;
+  const sigs=ins.sig.map(s=>`<li><span>${s}</span></li>`).join('');
+  const acts=ins.acts.map(a=>`
+    <div class="a-tile">
+      <div class="a-icon-wrap" style="background:${t.bg}">${a.i}</div>
+      <div class="a-label">${a.l}</div>
+      <div class="a-sub">${a.s}</div>
+    </div>`).join('');
+
+  document.getElementById('iContent').innerHTML=`
+    <div class="i-header">
+      <div class="i-chip" style="background:${t.bg};color:${t.color};border:2px solid ${t.color}33">${t.label}</div>
+      <div class="i-title">${ins.h}</div>
+    </div>
+    <div class="i-card">
+      <div class="i-card-label">What's happening</div>
+      <div class="i-body">${ins.b}</div>
+    </div>
+    <div class="i-card">
+      <div class="i-card-label">Common signals</div>
+      <ul class="signal-list">${sigs}</ul>
+    </div>
+    <div class="i-card">
+      <div class="i-card-label">What you can do</div>
+      <div class="action-row">${acts}</div>
+    </div>
+    <div class="crisis-card">
+      <div class="crisis-icon">🆘</div>
+      <div class="crisis-text"><strong>If things ever feel unsafe</strong> — call or text <strong>988</strong>, or text HOME to <strong>741741</strong>. You matter and help is available right now.</div>
+    </div>`;
+
+  const old=document.getElementById('_sc');if(old)old.remove();
+  const st=document.createElement('style');st.id='_sc';
+  st.textContent=`.signal-list li::before{background:${t.sigColor};}`;
+  document.head.appendChild(st);
+  go('insight');
+}
+
+function pickMood(v,el){
+  selMood=v;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('logBtn').disabled=false;
+}
+
+function saveM(){
+  if(!selMood) return;
+  const note=document.getElementById('mNote').value.trim();
+  log.unshift({mood:selMood,note,date:new Date().toISOString()});
+  if(log.length>30) log=log.slice(0,30);
+  localStorage.setItem('unmuted_a',JSON.stringify(log));
+  selMood=null;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('mNote').value='';
+  document.getElementById('logBtn').disabled=true;
+  showToast('Check-in saved ✓');
+  renderTracker();
+}
+
+function renderTracker(){
+  const recent=log.slice(0,7).reverse();
+  const cb=document.getElementById('chartBox');
+  if(recent.length){
+    cb.style.display='block';
+    const avg=(recent.reduce((a,e)=>a+e.mood,0)/recent.length).toFixed(1);
+    document.getElementById('cAvg').textContent=`Avg: ${avg}/5`;
+    document.getElementById('cBars').innerHTML=recent.map(e=>{
+      const h=Math.round(e.mood/5*100);
+      const d=new Date(e.date);
+      return `<div class="b-col"><div class="bar" style="height:${h}%;background:${MC[e.mood]}"></div><div class="b-em">${ME[e.mood]}</div><div class="b-day">${d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,3)}</div></div>`;
+    }).join('');
+  } else { cb.style.display='none'; }
+
+  const el=document.getElementById('entryList');
+  if(!log.length){
+    el.innerHTML='<div class="empty-msg">No check-ins yet.<br>Pick a mood above to get started.</div>';
   } else {
-    showInsight();
+    el.innerHTML=log.slice(0,5).map(e=>{
+      const d=new Date(e.date);
+      return `<div class="entry"><div class="e-emoji">${ME[e.mood]}</div><div><div class="e-date">${d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})} · ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</div>${e.note?`<div class="e-note">${e.note}</div>`:''}</div></div>`;
+    }).join('');
   }
 }
 
-function showInsight() {
-  const t = topics[currentTopic];
-  const ins = t.insight;
-
-  const actionsHTML = ins.actions.map(a => `
-    <div class="action-tile">
-      <div class="tile-icon">${a.icon}</div>
-      <div class="tile-label">${a.label}</div>
-      <div class="tile-sub">${a.sub}</div>
-    </div>
-  `).join('');
-
-  const signalsHTML = ins.signals.map(s => `<li>${s}</li>`).join('');
-
-  document.getElementById('insightContent').innerHTML = `
-    <div class="section-label" style="color:${t.color}">Your insight — ${t.label}</div>
-    <h2 class="section-title" style="margin-bottom:32px">${ins.whatItIs}</h2>
-
-    <div class="insight-card">
-      <div class="insight-label">What's happening</div>
-      <div class="insight-body">${ins.explanation}</div>
-    </div>
-
-    <div class="insight-card">
-      <div class="insight-label">Common signals</div>
-      <ul class="signal-list">${signalsHTML}</ul>
-    </div>
-
-    <div class="insight-card">
-      <div class="insight-label">What you can do</div>
-      <div class="action-grid">${actionsHTML}</div>
-    </div>
-
-    <div class="crisis-banner">
-      <div class="icon">🆘</div>
-      <div class="crisis-text">
-        <strong>If things ever feel overwhelming or unsafe</strong> — please reach out immediately.
-        Crisis Text Line: text <strong>HOME to 741741</strong>. Call or text <strong>988</strong> (Suicide & Crisis Lifeline). You matter, and help is available.
-      </div>
-    </div>
-  `;
-
-  showScreen('insight');
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
+
+renderTracker();
 </script>
 </body>
 </html>
